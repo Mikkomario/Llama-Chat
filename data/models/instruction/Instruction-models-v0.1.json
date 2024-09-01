@@ -1,0 +1,127 @@
+[
+  {
+    "name": "Instruction",
+    "prefix": "Stored",
+    "doc": "Represents a behavioral instruction that may be given to an LLM",
+    "props": [
+      {
+        "type": "creation"
+      }
+    ]
+  },
+  {
+    "name": "InstructionVersion",
+    "doc": "Represents a specific instruction version. Different versions may have different configurations, syntax, etc.",
+    "props": [
+      {
+        "name": "name",
+        "index": true,
+        "type": "String(16-228)",
+        "doc": "Name of this instruction",
+        "with": "withName"
+      },
+      {
+        "ref": "enum_value",
+        "type": "Option[Int]",
+        "doc": "Id of the enumeration value selected by applying this instruction. None if not enumeration-based.",
+        "with": "referringToEnumValue"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when this version was replaced with a new one"
+      }
+    ]
+  },
+  {
+    "name": "InstructionStatementLink",
+    "extends": "StatementLink",
+    "access": "version.link.statement",
+    "doc": "Attaches a statement to an instruction where that statement appears",
+    "props": [
+      {
+        "extends": "parentId",
+        "ref": "instruction_version",
+        "name": "instructionVersionId",
+        "doc": "Id of the instruction version where the linked statement is made",
+        "with": "withinInstruction",
+        "in": "withinInstructions"
+      }
+    ]
+  },
+  {
+    "name": "InstructionTargetingLink",
+    "generic": true,
+    "access": "link",
+    "doc": "Links an instruction to some entity to which / where it applies",
+    "props": [
+      {
+        "name": "targetId",
+        "doc": "Id of the entity to which or where the linked instruction applies",
+        "with": "appliedIn",
+        "in": "appliedIn"
+      },
+      {
+        "name": "instructionId",
+        "ref": "instruction",
+        "doc": "Id of the instruction applied to the linked entity",
+        "with": "applyingInstruction"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "name": "removedAfter",
+        "name_plural": "removeTimes",
+        "type": "deprecation",
+        "doc": "Time after which this link was removed"
+      }
+    ]
+  },
+  {
+    "name": "PersonaInstructionLink",
+    "extends": "InstructionTargetingLink",
+    "access": "link.persona",
+    "doc": "Links an instruction to a persona to which it applies",
+    "props": [
+      {
+        "extends": "targetId",
+        "name": "personaId",
+        "ref": "persona",
+        "doc": "Id of the persona to which the linked instruction applies",
+        "with": "forPersona",
+        "in": "forPersonas"
+      }
+    ]
+  },
+  {
+    "name": "TopicInstructionLink",
+    "extends": "InstructionTargetingLink",
+    "access": "link.topic",
+    "doc": "Links an instruction to a topic where it applies",
+    "props": [
+      {
+        "extends": "targetId",
+        "name": "topicId",
+        "ref": "topic",
+        "doc": "Id of the topic where the linked instruction applies"
+      }
+    ]
+  },
+  {
+    "name": "ThreadInstructionLink",
+    "extends": "InstructionTargetingLink",
+    "access": "link.thread",
+    "doc": "Links an instruction to a thread where it applies",
+    "props": [
+      {
+        "extends": "targetId",
+        "name": "threadId",
+        "ref": "thread",
+        "doc": "Id of the thread where the linked instruction applies"
+      }
+    ]
+  }
+]

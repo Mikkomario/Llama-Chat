@@ -1,0 +1,151 @@
+[
+  {
+    "name": "MetaInfoField",
+    "prefix": "Stored",
+    "access": "field",
+    "doc": "Represents an individual meta info value that can be made available or unavailable",
+    "combo": {
+      "name": "DetailedMetaInfoField",
+      "child": "CustomMetaInfo",
+      "parent_alias": "field",
+      "child_alias": "customInfo",
+      "doc": "Combines a meta info field with user-defined information, if applicable"
+    },
+    "props": [
+      {
+        "name": "automatedContent",
+        "type": "Option[Enum[AutomatedMetaInfo]]",
+        "doc": "Automatically fillable value. None if this is not an automated field."
+      },
+      {
+        "name": "customInfoId",
+        "ref": "custom_meta_info",
+        "type": "Option[Int]",
+        "mutable": true,
+        "doc": "Id of the customized information in this field. None if this is an automated field.",
+        "with": "withCustomInfo"
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "archivedAfter",
+        "name_plural": "archiveTimes",
+        "type": "deprecation",
+        "doc": "Time when this field was archived, if applicable"
+      }
+    ]
+  },
+  {
+    "name": "CustomMetaInfo",
+    "access": "custom",
+    "doc": "Represents a user-defined meta info field definition",
+    "props": [
+      {
+        "name": "name",
+        "index": true,
+        "type": "NonEmptyString(16-228)",
+        "doc": "Name of this field",
+        "with": "withName"
+      },
+      {
+        "name": "value",
+        "type": "NonEmptyString(32-1024)",
+        "doc": "Value assigned to this field"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when this version was replaced with another"
+      }
+    ]
+  },
+  {
+    "name": "MetaInfoAvailability",
+    "generic": true,
+    "access": "availability",
+    "doc": "Links a meta info field to a context where it is made available to a persona",
+    "props": [
+      {
+        "name": "fieldId",
+        "ref": "MetaInfoField",
+        "doc": "Id of the meta info -field made available",
+        "with": "ofField"
+      },
+      {
+        "name": "contextId",
+        "type": "Int",
+        "doc": "Id of the context where the linked information is made available",
+        "with": "inContext"
+      },
+      {
+        "type": "creation",
+        "index": false,
+        "doc": "Time when this information was made available"
+      }
+    ]
+  },
+  {
+    "name": "PersonaInfoAvailability",
+    "extends": "MetaInfoAvailability",
+    "access": "availability.persona",
+    "doc": "A link that makes a meta info field available to a persona",
+    "props": [
+      {
+        "extends": "contextId",
+        "name": "personaId",
+        "ref": "persona",
+        "doc": "Id of the persona to which the linked information is made available",
+        "with": "forPersona"
+      }
+    ]
+  },
+  {
+    "name": "PersonaInfoAvailability",
+    "extends": "MetaInfoAvailability",
+    "access": "availability.persona",
+    "doc": "A link that makes a meta info field available to a persona",
+    "props": [
+      {
+        "extends": "contextId",
+        "name": "personaId",
+        "ref": "persona",
+        "doc": "Id of the persona to which the linked information is made available",
+        "with": "forPersona"
+      }
+    ]
+  },
+  {
+    "name": "TopicInfoAvailability",
+    "extends": "MetaInfoAvailability",
+    "access": "availability.topic",
+    "doc": "A link that makes a meta info field available within a specific topic",
+    "props": [
+      {
+        "extends": "contextId",
+        "name": "topicId",
+        "ref": "topic",
+        "doc": "Id of the topic where the linked information is made available",
+        "with": "inTopic"
+      }
+    ]
+  },
+  {
+    "name": "ThreadInfoAvailability",
+    "extends": "MetaInfoAvailability",
+    "access": "availability.thread",
+    "doc": "A link that makes a meta info field available within a specific thread",
+    "props": [
+      {
+        "extends": "contextId",
+        "name": "threadId",
+        "ref": "thread",
+        "doc": "Id of the thread where the linked information is made available",
+        "with": "inThread"
+      }
+    ]
+  }
+]

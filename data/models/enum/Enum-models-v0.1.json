@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Enum",
+    "doc": "Represents an enumeration",
+    "props": [
+      {
+        "name": "name",
+        "type": "NonEmptyString(16-228)",
+        "mutable": true,
+        "index": true,
+        "doc": "Name of this enumeration (mutable)",
+        "with": "withName"
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "archivedAfter",
+        "name_plural": "archiveTimes",
+        "type": "deprecation",
+        "doc": "Time when this enumeration was archived"
+      }
+    ]
+  },
+  {
+    "name": "EnumValue",
+    "doc": "Represents an individual enumeration value",
+    "props": [
+      {
+        "ref": "enum",
+        "doc": "Id of the enumeration where this value appears",
+        "with": "inEnum"
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "archivedAfter",
+        "name_plural": "archiveTimes",
+        "type": "deprecation",
+        "doc": "Time when this enumeration value was archived"
+      }
+    ]
+  },
+  {
+    "name": "EnumValueVersion",
+    "access": "value.version",
+    "doc": "Represents a specific version of an enumeration value",
+    "combos": [
+      {
+        "name": "ContextualEnumValueVersion",
+        "child": "EnumValue",
+        "is_always_linked": true,
+        "parent_alias": "version",
+        "child_alias": "value",
+        "doc": "Includes consistent enumeration value information with this versioned info"
+      },
+      {
+        "name": "StatementLinkedEnumValueVersion",
+        "children": "EnumValueStatementLink",
+        "parent_alias": "valueVersion",
+        "child_alias": "link",
+        "doc": "Attaches statement links to an enumeration value version where they are made"
+      }
+    ],
+    "props": [
+      {
+        "ref": "enum_value",
+        "doc": "Id of the enumeration value which this version describes",
+        "with": "ofEnumValue"
+      },
+      {
+        "name": "name",
+        "type": "NonEmptyString(16-255)",
+        "doc": "Name of this enumeration value"
+      },
+      {
+        "ref": "color",
+        "doc": "Id of the color used for this enumeration value"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when this version was replaced with a newer one"
+      }
+    ]
+  },
+  {
+    "name": "EnumValueStatementLink",
+    "access": "value.version.link.statement",
+    "extends": "StatementLink",
+    "props": [
+      {
+        "extends": "parentId",
+        "ref": "enum_value_version",
+        "name": "enumValueVersionId",
+        "doc": "Id of the enumeration value version where the linked statement appears",
+        "with": "inEnumValueVersion",
+        "in": "inEnumValueVersions"
+      }
+    ]
+  }
+]

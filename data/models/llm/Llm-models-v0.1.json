@@ -1,0 +1,79 @@
+[
+  {
+    "name": "Llm",
+    "doc": "Represents a large language model",
+    "combos": [
+      {
+        "name": "LlmWithVariants",
+        "children": "LlmSizeVariant",
+        "child_alias": "variant",
+        "doc": "Includes LLM's size variants with the base LLM model"
+      }
+    ],
+    "props": [
+      {
+        "name": "name",
+        "type": "NonEmptyString(32-255)",
+        "doc": "Name of this LLM in Ollama"
+      },
+      {
+        "name": "alias",
+        "name_plural": "aliases",
+        "type": "String(32-255)",
+        "mutable": true,
+        "doc": "Alias given to this LLM"
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "removedAfter",
+        "type": "deprecation",
+        "doc": "Time when this LLM was removed from this application"
+      }
+    ]
+  },
+  {
+    "name": "LlmSizeVariant",
+    "access": "variant",
+    "doc": "Represents a specific version (size) of a large language model",
+    "combos": [
+      {
+        "name": "ContextualLlmSizeVariant",
+        "child": "Llm",
+        "parent_alias": "variant",
+        "is_always_linked": true,
+        "doc": "Attaches LLM's information to a specific size variant"
+      }
+    ],
+    "props": [
+      {
+        "name": "llmId",
+        "ref": "llm",
+        "doc": "Id of the LLM this is a variant of",
+        "with": "ofLlm"
+      },
+      {
+        "name": "suffix",
+        "name_plural": "suffixes",
+        "type": "String(32-255)",
+        "doc": "Suffix added to the end of the LLM's name when targeting this specific variant"
+      },
+      {
+        "name": "size",
+        "type": "Option[Int]",
+        "doc": "Size of this LLM variant in billions of parameters. None if unknown."
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "removedAfter",
+        "type": "deprecation",
+        "doc": "Time when this specific variant was removed from this application"
+      }
+    ]
+  }
+]

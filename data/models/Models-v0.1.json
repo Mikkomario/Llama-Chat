@@ -1,0 +1,151 @@
+{
+  "project": "LlamaChat",
+  "author": "Mikko Hilpinen",
+  "version": "v0.1",
+  "package": "vf.llama",
+  "database": "llama_db",
+  "enums": [
+    {
+      "name": "PersonaDescriptionType",
+      "doc": "Lists different types of descriptions given to a persona",
+      "default": "Description",
+      "values": [
+        {
+          "name": "Description",
+          "doc": "General persona description. Used mainly towards the user."
+        },
+        {
+          "name": "IdentityDescription",
+          "doc": "A description of a persona's identity. Used as an instruction to said persona on how to behave."
+        }
+      ]
+    },
+    {
+      "name": "SummaryStatementRole",
+      "doc": "Lists different roles statements can possibly have in summaries",
+      "default": "Body",
+      "values": [
+        {
+          "name": "Body",
+          "doc": "Indicates that a statement appears within the summary body text"
+        },
+        {
+          "name": "Header",
+          "doc": "Indicates that a statement appears within the summary header / synopsis"
+        }
+      ]
+    },
+    {
+      "name": "AutomatedMetaInfo",
+      "doc": "Represents a meta information which can be provided automatically by this application",
+      "values": [
+        {
+          "name": "CurrentDate",
+          "doc": "Always contains the current date"
+        },
+        {
+          "name": "CurrentTime",
+          "doc": "Always contains the current local time"
+        },
+        {
+          "name": "CurrentWeekday",
+          "doc": "Always contains the current weekday"
+        },
+        {
+          "name": "Timezone",
+          "doc": "Contains the local time-zone, based on system information"
+        }
+      ]
+    }
+  ],
+  "referenced_enums": ["utopia.echo.model.enumeration.SenderRole"],
+  "classes": {
+    "llm": "llm",
+    "persona": "persona",
+    "conversation": "conversation",
+    "instruction": "instruction",
+    "enum": "enum",
+    "meta": "meta",
+    "statement": [
+      {
+        "name": "TextPlacement",
+        "generic": true,
+        "from": "utopia.logos",
+        "access": "placement",
+        "doc": "Places some type of text to some location within another text",
+        "props": [
+          {
+            "name": "parentId",
+            "type": "Int",
+            "doc": "Id of the text where the placed text appears",
+            "with": "withinText"
+          },
+          {
+            "name": "placedId",
+            "type": "Int",
+            "doc": "Id of the text that is placed within the parent text",
+            "with": "placing",
+            "in": "placingTexts"
+          },
+          {
+            "name": "orderIndex",
+            "name_plural": "orderIndices",
+            "type": "Int(tiny)",
+            "length_rule": "Expand",
+            "doc": "0-based index that indicates the specific location of the placed text",
+            "default": 0,
+            "with": "at",
+            "in": "atIndices"
+          }
+        ]
+      },
+      {
+        "name": "StatementLink",
+        "extends": "TextPlacement",
+        "generic": true,
+        "access": "-",
+        "doc": "Common trait for links between statements and the texts where they are made",
+        "props": [
+          {
+            "extends": "placedId",
+            "ref": "statement",
+            "name": "statementId",
+            "doc": "Id of the statement made within the linked text / entity"
+          }
+        ]
+      }
+    ],
+    "color": [
+      {
+        "name": "Color",
+        "doc": "Represents a color",
+        "props": [
+          {
+            "name": "hue",
+            "type": "Angle",
+            "doc": "Hue of this color, as an angle"
+          },
+          {
+            "name": "saturation",
+            "type": "Double",
+            "default": 1.0,
+            "doc": "Saturation (color intensity) of this color"
+          },
+          {
+            "name": "lightness",
+            "name_plural": "lightnessValues",
+            "type": "Double",
+            "default": 0.5,
+            "doc": "Lightness of this color. Between 0 (black) and 1 (white)."
+          },
+          {
+            "name": "predefined",
+            "name_plural": "arePredefined",
+            "type": "Boolean",
+            "doc": "Whether this is a predefined color. False if this is a user-defined color."
+          }
+        ]
+      }
+    ]
+  }
+}

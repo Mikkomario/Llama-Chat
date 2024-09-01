@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="apache.httpcomponents.client5.httpclient5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/commons-codec-1.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/httpclient5-5.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/httpcore5-5.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/httpcore5-h2-5.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/slf4j-api-1.7.25.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

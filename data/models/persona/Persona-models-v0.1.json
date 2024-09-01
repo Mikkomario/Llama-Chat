@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Persona",
+    "doc": "Represents a personalized large language model",
+    "prefix": "Stored",
+    "has_many_combos": true,
+    "combo": {
+      "name": "PersonaWithSettings",
+      "name_plural": "PersonasWithSettings",
+      "child": "PersonaSettings",
+      "is_always_linked": true,
+      "child_alias": "settings",
+      "children_alias": "settings",
+      "doc": "Attaches settings to a persona. Doesn't include descriptions."
+    },
+    "props": [
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "deletedAfter",
+        "type": "deprecation",
+        "doc": "Time when this persona was deleted"
+      }
+    ]
+  },
+  {
+    "name": "PersonaSettings",
+    "name_plural": "PersonaSettings",
+    "access": "settings",
+    "doc": "Records general settings (version) for a Persona",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "StatementLinkedPersonaSettings",
+        "name_plural": "StatementLinkedPersonaSettings",
+        "children": "PersonaStatementLink",
+        "parent_alias": "settings",
+        "parent_alias_plural": "settings",
+        "child_alias": "link",
+        "children_alias": "links",
+        "doc": "Attaches statement links to persona settings"
+      },
+      {
+        "name": "PersonaSettingsWithParameters",
+        "name_plural": "PersonaSettingsWithParameters",
+        "children": "PersonaParameter",
+        "parent_alias": "settings",
+        "child_alias": "parameter",
+        "doc": "Attaches parameter assignments to a persona settings instance"
+      }
+    ],
+    "props": [
+      {
+        "ref": "persona",
+        "doc": "Id of the persona which these settings describe",
+        "with": "forPersona"
+      },
+      {
+        "name": "llmVariantId",
+        "ref": "llm_size_variant",
+        "doc": "Id of the LLM variant this persona wraps",
+        "with": "usingLlmVariant"
+      },
+      {
+        "name": "name",
+        "type": "String(32-255)",
+        "index": true,
+        "doc": "Name assigned for this persona",
+        "with": "named",
+        "in": "withNames"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when these settings were replaced with a new version"
+      }
+    ]
+  },
+  {
+    "name": "PersonaParameter",
+    "access": "settings.parameter",
+    "doc": "Represents an individual parameter / option assignment which is tied to a persona (version)",
+    "props": [
+      {
+        "name": "settingsId",
+        "ref": "persona_settings",
+        "doc": "Id of the persona settings this parameter assignment is part of",
+        "with": "partOfSettings"
+      },
+      {
+        "name": "key",
+        "type": "NonEmptyString(6-64)",
+        "doc": "Name / key of the adjusted parameter"
+      },
+      {
+        "name": "value",
+        "type": "Value(32-255)",
+        "doc": "Value assigned to this parameter"
+      }
+    ]
+  },
+  {
+    "name": "PersonaStatementLink",
+    "extends": "StatementLink",
+    "access": "link.statement",
+    "doc": "Links a statement to a Persona description",
+    "props": [
+      {
+        "name": "personaSettingsId",
+        "extends": "parentId",
+        "ref": "persona_settings",
+        "doc": "Id of the settings to which this link is tied to",
+        "with": "inPersonaSettings",
+        "in": "inPersonaSettings"
+      },
+      {
+        "name": "descriptionType",
+        "type": "Enum[PersonaDescriptionType]",
+        "doc": "Context in which the linked statement appears"
+      }
+    ]
+  },
+  {
+    "name": "PersonaImageSet",
+    "access": "image.set",
+    "prefix": "Stored",
+    "doc": "Represents a set of images used for visualizing a Persona",
+    "has_many_combos": true,
+    "combo": {
+      "name": "PersonaLinkedImageSet",
+      "child": "PersonaImageSetLink",
+      "is_always_linked": true,
+      "parent_alias": "imageSet",
+      "child_alias": "link",
+      "doc": "Represents an image set used for a specific persona"
+    },
+    "props": [
+      {
+        "name": "relativeDirectory",
+        "type": "path",
+        "index": true,
+        "doc": "Path to the directory that contains the images used in this image set. \nRelative to the main image directory.",
+        "with": "usingDirectory",
+        "in": "usingDirectories"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "name": "removedAfter",
+        "type": "deprecation",
+        "doc": "Time when this image set was removed or deleted"
+      }
+    ]
+  },
+  {
+    "name": "PersonaImageSetLink",
+    "access": "image.link",
+    "doc": "Links a Persona with an image set used for that Persona",
+    "props": [
+      {
+        "name": "personaId",
+        "ref": "persona",
+        "doc": "Id of the persona for which the linked images are used",
+        "with": "forPersona"
+      },
+      {
+        "name": "imageSetId",
+        "ref": "persona_image_set",
+        "doc": "Id of the image set used for the linked persona",
+        "with": "usingImageSet"
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "name": "removedAfter",
+        "type": "deprecation",
+        "doc": "Time when this link was removed"
+      }
+    ]
+  },
+  {
+    "name": "PersonaAnimation",
+    "access": "image.animation",
+    "prefix": "Stored",
+    "doc": "Represents an individual animation representing some state of a Persona",
+    "has_many_combos": true,
+    "combo": {
+      "name": "PersonaAnimationWithFrames",
+      "name_plural": "PersonaAnimationsWithImageFrames",
+      "children": "PersonaImage",
+      "is_always_linked": true,
+      "parent_alias": "animation",
+      "child_alias": "frame",
+      "doc": "Represents an animation with the images included"
+    },
+    "props": [
+      {
+        "name": "setId",
+        "ref": "persona_image_set",
+        "doc": "Id of the set to which this animation belongs",
+        "with": "withinImageSet"
+      },
+      {
+        "name": "relativeSubDirectory",
+        "type": "Path",
+        "default": {
+          "code": "\"\"",
+          "refs": ["utopia.flow.parse.file.FileExtensions._"]
+        },
+        "doc": "Path to the directory that contains image files specific to this animation. \nRelative to the image set's directory."
+      },
+      {
+        "name": "defaultFrameDuration",
+        "type": "Option[Duration[ms]]",
+        "doc": "Duration how long each frame will be shown by default. \nNone if the common default should be used instead."
+      }
+    ]
+  },
+  {
+    "name": "PersonaImage",
+    "access": "image",
+    "doc": "Represents an individual image / frame within a Persona animation",
+    "combo_index": ["animationId", "orderIndex"],
+    "props": [
+      {
+        "name": "animationId",
+        "ref": "persona_animation",
+        "doc": "Id of the animation this image is part of",
+        "with": "withinAnimation"
+      },
+      {
+        "name": "fileName",
+        "type": "NonEmptyString(32-255)",
+        "doc": "Name of the wrapped image file"
+      },
+      {
+        "name": "orderIndex",
+        "type": "Int(tiny)",
+        "default": 0,
+        "doc": "0-based index of this image within its animation"
+      },
+      {
+        "name": "customDuration",
+        "type": "Option[Duration[ms]]",
+        "doc": "Duration how long this image / frame should be displayed at once. \nNone if the default duration should be applied."
+      }
+    ]
+  },
+  {
+    "name": "AnimationEmotionAssignment",
+    "access": "image.animation.emotion",
+    "doc": "Contains an assessment of an animation's emotional expression",
+    "props": [
+      {
+        "name": "animationId",
+        "ref": "persona_animation",
+        "doc": "Id of the animation this assignment describes",
+        "with": "forAnimation"
+      },
+      {
+        "name": "emotion",
+        "type": "NonEmptyString(12-128)",
+        "allow_crop": true,
+        "doc": "Name of the emotion assigned to this animation"
+      },
+      {
+        "name": "originLlmId",
+        "ref": "llm_size_variant",
+        "type": "Option[Int]",
+        "doc": "Id of the LLM (variant) which assigned this emotion. None if not assigned by a (known) LLM.",
+        "with": "byLlmVariant"
+      },
+      {
+        "type": "creation",
+        "index": false
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when this assignment was replaced or retracted"
+      }
+    ]
+  }
+]

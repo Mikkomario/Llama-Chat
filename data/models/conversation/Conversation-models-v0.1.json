@@ -1,0 +1,328 @@
+[
+  {
+    "name": "Topic",
+    "prefix": "Stored",
+    "access": "topic",
+    "doc": "Represents a general conversation topic / theme, assigned to a single persona",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "TopicWithSettings",
+        "name_plural": "TopicsWithSettings",
+        "child": "TopicSettings",
+        "is_always_linked": true,
+        "child_alias": "settings",
+        "children_alias": "settings",
+        "doc": "Includes settings with a topic instance"
+      }
+    ],
+    "props": [
+      {
+        "type": "creation"
+      },
+      {
+        "named": "archivedAfter",
+        "name_plural": "archiveTimes",
+        "type": "deprecation",
+        "doc": "Time when this topic was archived"
+      }
+    ]
+  },
+  {
+    "name": "TopicSettings",
+    "name_plural": "TopicSettings",
+    "access": "topic.settings",
+    "doc": "Specifies the name of a topic and the persona with whom that topic is discussed",
+    "props": [
+      {
+        "ref": "topic",
+        "doc": "Id of the topic these settings describe",
+        "with": "forTopic"
+      },
+      {
+        "ref": "persona",
+        "doc": "Id of the persona with whom this topic is discussed",
+        "with": "usingPersona"
+      },
+      {
+        "name": "name",
+        "type": "String(24-128)",
+        "index": true,
+        "doc": "Name assigned to this topic",
+        "with": "withName"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when these settings were replaced with another version"
+      }
+    ]
+  },
+  {
+    "name": "Thread",
+    "prefix": "Stored",
+    "access": "thread",
+    "doc": "Represents a single named sequence of conversations within a specific topic",
+    "has_many_combos": true,
+    "combos": [],
+    "props": [
+      {
+        "ref": "topic",
+        "doc": "Id of the general topic of this thread",
+        "with": "withinTopic"
+      },
+      {
+        "name": "name",
+        "type": "String(16-255)",
+        "mutable": true,
+        "index": true,
+        "doc": "The current name of this thread",
+        "with": "withName"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "name": "archivedAfter",
+        "name_plural": "archiveTimes",
+        "type": "deprecation",
+        "doc": "Time when this thread was archived"
+      }
+    ]
+  },
+  {
+    "name": "Conversation",
+    "prefix": "Stored",
+    "doc": "Represents an individual conversation with a persona",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "ConversationWithSessions",
+        "name_plural": "ConversationsWithSessions",
+        "children": "Session",
+        "is_always_linked": true,
+        "doc": "Links individual sessions to a conversation"
+      }
+    ],
+    "props": [
+      {
+        "ref": "thread",
+        "doc": "Id of the thread this conversation is part of",
+        "with": "withinThread"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "name": "closedAfter",
+        "name_plural": "closingTimes",
+        "type": "deprecation",
+        "mutable": true,
+        "doc": "Time when this conversation was closed the last time"
+      }
+    ]
+  },
+  {
+    "name": "ConversationSummary",
+    "name_plural": "ConversationSummaries",
+    "prefix": "Stored",
+    "access": "summary",
+    "doc": "Summarizes a conversation",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "StatementLinkedConversationSummary",
+        "name_plural": "StatementLinkedConversationSummaries",
+        "children": "ConversationSummaryStatementLink",
+        "is_always_linked": true,
+        "parent_alias": "summary",
+        "child_alias": "link",
+        "doc": "Includes links to individual statements made within this summary"
+      }
+    ],
+    "props": [
+      {
+        "ref": "conversation",
+        "doc": "Id of the conversation this is a summary of",
+        "with": "ofConversation"
+      },
+      {
+        "type": "creation"
+      },
+      {
+        "type": "deprecation",
+        "doc": "Time when this summary was replaced with a new version"
+      }
+    ]
+  },
+  {
+    "name": "ConversationSummaryStatementLink",
+    "extends": "StatementLink",
+    "access": "summary.link.statement",
+    "doc": "Links statements to conversation summaries in which they appear",
+    "props": [
+      {
+        "name": "summaryId",
+        "parent": "parentId",
+        "ref": "conversation_summary",
+        "doc": "Id of the linked conversation summary",
+        "with": "inSummary",
+        "in": "inSummaries"
+      },
+      {
+        "name": "role",
+        "type": "Enum[SummaryStatementRole]",
+        "index": true,
+        "doc": "Role of the linked statement in the linked summary",
+        "with": "withRole"
+      }
+    ]
+  },
+  {
+    "name": "Session",
+    "prefix": "Stored",
+    "doc": "Represents an individual user session within a conversation",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "SummaryStatementLinkedSession",
+        "children": "SessionSummaryStatementLink",
+        "parent_alias": "session",
+        "child_alias": "summaryStatementLink",
+        "doc": "Includes links to statements which appear within this session's summary"
+      }
+    ],
+    "props": [
+      {
+        "ref": "conversation",
+        "doc": "Id of the conversation active during this session",
+        "with": "ofConversation"
+      },
+      {
+        "name": "started",
+        "name_plural": "startTimes",
+        "type": "creation",
+        "doc": "Time when this session started"
+      },
+      {
+        "name": "ended",
+        "name_plural": "endTimes",
+        "type": "deprecation",
+        "doc": "Time when this session ended. None while active."
+      }
+    ]
+  },
+  {
+    "name": "SessionSummaryStatementLink",
+    "extends": "StatementLink",
+    "access": "session.summary.link.statement",
+    "doc": "Links statements to session summaries in which they appear",
+    "props": [
+      {
+        "extends": "parentId",
+        "name": "sessionId",
+        "ref": "session",
+        "doc": "Id of the session being summarized",
+        "with": "inSummary",
+        "in": "inSummaries"
+      }
+    ]
+  },
+  {
+    "name": "Message",
+    "prefix": "Stored",
+    "doc": "Represents a single message from the user or from a persona",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "StatementLinkedMessage",
+        "children": "MessageStatementLink",
+        "is_always_linked": true,
+        "child_alias": "link",
+        "doc": "Includes links to the statements made within this message"
+      }
+    ],
+    "props": [
+      {
+        "ref": "session",
+        "doc": "Id of the session during which this message was posted",
+        "with": "postedDuringSession"
+      },
+      {
+        "name": "sender",
+        "type": "Enum[SenderRole]",
+        "index": true,
+        "doc": "Role of the entity that sent this message",
+        "with": "by",
+        "in": "bySenders"
+      },
+      {
+        "type": "creation",
+        "doc": "Time when this message was posted"
+      }
+    ]
+  },
+  {
+    "name": "MessageStatementLink",
+    "extends": "StatementLink",
+    "access": "message.link.statement",
+    "doc": "Links statements to messages where they appear",
+    "props": [
+      {
+        "extends": "parentId",
+        "name": "messageId",
+        "ref": "message",
+        "doc": "Id of the message where the linked statement appears",
+        "with": "inMessage",
+        "in": "inMessages"
+      }
+    ]
+  },
+  {
+    "name": "Memory",
+    "name_plural": "Memories",
+    "prefix": "Stored",
+    "doc": "Represents a memory recorded during a conversation",
+    "has_many_combos": true,
+    "combos": [
+      {
+        "name": "StatementLinkedMemory",
+        "children": "MemoryStatementLink",
+        "is_always_linked": true,
+        "child_alias": "link",
+        "doc": "Includes links to statements made within this memory"
+      }
+    ],
+    "props": [
+      {
+        "ref": "message",
+        "doc": "Id of the message from which this memory was triggered",
+        "with": "fromMessage"
+      },
+      {
+        "name": "archivedAfter",
+        "name_plural": "archiveTimes",
+        "type": "deprecation",
+        "doc": "Time when this memory was archived"
+      }
+    ]
+  },
+  {
+    "name": "MemoryStatementLink",
+    "extends": "StatementLink",
+    "access": "memory.link.statement",
+    "doc": "Links statements to memories in which they appear",
+    "props": [
+      {
+        "extends": "parentId",
+        "name": "memoryId",
+        "ref": "memory",
+        "doc": "Id of the memory where the linked statement appears",
+        "with": "inMemory",
+        "in": "inMemories"
+      }
+    ]
+  }
+]

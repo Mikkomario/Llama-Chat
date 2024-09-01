@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Access/Access.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Access/Access.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Annex/Annex.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Annex/Annex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/BunnyMunch/BunnyMunch.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/BunnyMunch/BunnyMunch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Disciple/Disciple.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Disciple/Disciple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Echo/Echo.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Echo/Echo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Flow/Flow.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Flow/Flow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Llama-Chat.iml" filepath="$PROJECT_DIR$/Llama-Chat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Logos/Logos.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Logos/Logos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Vault/Vault.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Vault/Vault.iml" />
+    </modules>
+  </component>
+</project>
