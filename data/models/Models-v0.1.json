@@ -58,7 +58,7 @@
       ]
     }
   ],
-  "referenced_enums": ["utopia.echo.model.enumeration.SenderRole"],
+  "referenced_enums": ["utopia.echo.model.enumeration.ChatRole"],
   "classes": {
     "llm": "llm",
     "persona": "persona",
@@ -66,7 +66,7 @@
     "instruction": "instruction",
     "enum": "enum",
     "meta": "meta",
-    "statement": [
+    "text": [
       {
         "name": "TextPlacement",
         "generic": true,
@@ -98,7 +98,9 @@
             "in": "atIndices"
           }
         ]
-      },
+      }
+    ],
+    "statement": [
       {
         "name": "StatementLink",
         "extends": "TextPlacement",

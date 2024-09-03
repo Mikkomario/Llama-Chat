@@ -252,7 +252,7 @@
       },
       {
         "name": "sender",
-        "type": "Enum[SenderRole]",
+        "type": "Enum[ChatRole]",
         "index": true,
         "doc": "Role of the entity that sent this message",
         "with": "by",
