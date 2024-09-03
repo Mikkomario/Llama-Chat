@@ -64,7 +64,7 @@
     "persona": "persona",
     "conversation": "conversation",
     "instruction": "instruction",
-    "enum": "enum",
+    "enums": "enum",
     "meta": "meta",
     "text": [
       {
