@@ -1,7 +1,6 @@
 package vf.llama.database.storable.statement
 
 import utopia.flow.generic.model.immutable.Value
-import utopia.logos.database.storable.text.TextPlacementDbModelFactory
 import utopia.vault.model.immutable.{DbPropertyDeclaration, Table}
 import vf.llama.database.props.statement.{StatementLinkDbProps, StatementLinkDbPropsWrapper}
 import vf.llama.model.partial.statement.StatementLinkData
@@ -119,6 +118,5 @@ object StatementLinkDbModelFactory
   * @since 01.09.2024, v0.1
   */
 trait StatementLinkDbModelFactory 
-	extends StatementLinkDbModelFactoryLike[StatementLinkDbModel, StatementLink, StatementLinkData] 
-		with TextPlacementDbModelFactory
+	extends StatementLinkDbModelFactoryLike[StatementLinkDbModel, StatementLink, StatementLinkData]
 

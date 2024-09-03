@@ -3,7 +3,9 @@ package vf.llama.database.access.many.instruction.link
 import utopia.flow.collection.immutable.IntSet
 import utopia.flow.generic.casting.ValueConversions._
 import utopia.vault.database.Connection
+import utopia.vault.model.immutable.Storable
 import utopia.vault.nosql.access.many.model.ManyModelAccess
+import utopia.vault.nosql.storable.deprecation.NullDeprecatable
 import utopia.vault.nosql.template.Indexed
 import utopia.vault.nosql.view.NullDeprecatableView
 import vf.llama.database.props.instruction.InstructionTargetingLinkDbProps
@@ -26,7 +28,7 @@ trait ManyInstructionTargetingLinksAccessLike[+A, +Repr]
 	/**
 	  * Model which contains the primary database properties interacted with in this access point
 	  */
-	protected def model: InstructionTargetingLinkDbProps
+	protected def model: InstructionTargetingLinkDbProps with NullDeprecatable[Storable]
 	
 	
 	// COMPUTED	--------------------

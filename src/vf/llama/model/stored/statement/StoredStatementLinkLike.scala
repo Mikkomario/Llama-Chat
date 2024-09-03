@@ -1,5 +1,6 @@
 package vf.llama.model.stored.statement
 
+import utopia.logos.model.partial.text.TextPlacementData
 import utopia.logos.model.stored.text.{StoredTextPlacementLike, TextPlacement}
 import vf.llama.model.factory.statement.StatementLinkFactoryWrapper
 import vf.llama.model.partial.statement.StatementLinkDataLike
@@ -11,7 +12,7 @@ import vf.llama.model.partial.statement.StatementLinkDataLike
   * @author Mikko Hilpinen
   * @since 01.09.2024, v0.1
   */
-trait StoredStatementLinkLike[Data <: StatementLinkDataLike[Data], +Repr <: TextPlacement] 
+trait StoredStatementLinkLike[Data <: StatementLinkDataLike[Data], +Repr <: TextPlacementData]
 	extends StatementLinkFactoryWrapper[Data, Repr] with StatementLinkDataLike[Repr] 
 		with StoredTextPlacementLike[Data, Repr] // with TextPlacement
 {

@@ -1,8 +1,8 @@
 package vf.llama.database.factory.instruction
 
 import utopia.flow.generic.model.template.ModelLike.AnyModel
-import utopia.vault.model.immutable.Table
-import utopia.vault.sql.OrderBy
+import utopia.vault.model.immutable.{DbPropertyDeclaration, Table}
+import utopia.vault.sql.{Condition, OrderBy}
 import vf.llama.database.props.instruction.InstructionTargetingLinkDbProps
 import vf.llama.model.partial.instruction.InstructionTargetingLinkData
 import vf.llama.model.stored.instruction.InstructionTargetingLink
@@ -28,13 +28,17 @@ object InstructionTargetingLinkDbFactory
 	  * @param table Table from which data is read
 	  * @param dbProps Database properties used when reading column data
 	  */
-	private case class _InstructionTargetingLinkDbFactory(table: Table, 
-		dbProps: InstructionTargetingLinkDbProps) 
+	private case class _InstructionTargetingLinkDbFactory(table: Table, dbProps: InstructionTargetingLinkDbProps)
 		extends InstructionTargetingLinkDbFactory
 	{
+		// ATTRIBUTES   --------------------
+		
+		override lazy val nonDeprecatedCondition: Condition = dbProps.removedAfter.isNull
+		
+		
 		// IMPLEMENTED	--------------------
 		
-		override def defaultOrdering: Option[OrderBy] = None
+		override def timestamp: DbPropertyDeclaration = dbProps.created
 		
 		/**
 		  * @param model Model from which additional data may be read

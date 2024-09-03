@@ -1,5 +1,7 @@
 package vf.llama.database
 
+import vf.llama.util.Common._
+import utopia.vault.database.Tables
 import utopia.vault.model.immutable.Table
 
 /**
@@ -7,8 +9,13 @@ import utopia.vault.model.immutable.Table
   * @author Mikko Hilpinen
   * @since 01.09.2024, v0.1
   */
-object LlamaChatTables
+object LlamaChatTables extends Tables(cPool)
 {
+	// ATTRIBUTES   ----------------
+	
+	private val dbName = "llama_db"
+	
+	
 	// COMPUTED	--------------------
 	
 	/**
@@ -33,8 +40,7 @@ object LlamaChatTables
 	def conversationSummary = apply("conversation_summary")
 	
 	/**
-	  * 
-		Table that contains conversation summary statement links (Links statements to conversation summaries in which
+	  * Table that contains conversation summary statement links (Links statements to conversation summaries in which
 	  *  they appear)
 	  */
 	def conversationSummaryStatementLink = apply("conversation_summary_statement_link")
@@ -47,7 +53,7 @@ object LlamaChatTables
 	/**
 	  * Table that contains enums (Represents an enumeration)
 	  */
-	def enum = apply("enum")
+	def enums = apply("enum")
 	
 	/**
 	  * Table that contains enum values (Represents an individual enumeration value)
@@ -77,9 +83,8 @@ object LlamaChatTables
 	def instructionStatementLink = apply("instruction_statement_link")
 	
 	/**
-	  * Table that contains instruction versions (Represents a specific instruction version. Different versions may have different configurations, 
-		
-	  * syntax, etc.)
+	  * Table that contains instruction versions (Represents a specific instruction version.
+	 * Different versions may have different configurations, syntax, etc.)
 	  */
 	def instructionVersion = apply("instruction_version")
 	
@@ -114,8 +119,7 @@ object LlamaChatTables
 	def messageStatementLink = apply("message_statement_link")
 	
 	/**
-	  * 
-		Table that contains meta info fields (Represents an individual meta info value that can be made available
+	  * Table that contains meta info fields (Represents an individual meta info value that can be made available
 	  *  or unavailable)
 	  */
 	def metaInfoField = apply("meta_info_field")
@@ -147,8 +151,7 @@ object LlamaChatTables
 	def personaImageSetLink = apply("persona_image_set_link")
 	
 	/**
-	  * 
-		Table that contains persona info availabilities (A link that makes a meta info field available to a persona)
+	  * Table that contains persona info availabilities (A link that makes a meta info field available to a persona)
 	  */
 	def personaInfoAvailability = apply("persona_info_availability")
 	
@@ -185,8 +188,7 @@ object LlamaChatTables
 	def sessionSummaryStatementLink = apply("session_summary_statement_link")
 	
 	/**
-	  * 
-		Table that contains threads (Represents a single named sequence of conversations within a specific topic)
+	  * Table that contains threads (Represents a single named sequence of conversations within a specific topic)
 	  */
 	def thread = apply("thread")
 	
@@ -227,11 +229,6 @@ object LlamaChatTables
 	
 	// OTHER	--------------------
 	
-	private def apply(tableName: String): Table = {
-		// TODO: Refer to a tables instance of your choice
-		// If you're using the Citadel module, import utopia.citadel.database.Tables
-		// Tables(tableName)
-		???
-	}
+	private def apply(tableName: String): Table = apply(dbName, tableName)
 }
 
