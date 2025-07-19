@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="apache.httpcomponents.client5.httpclient5">
+  <library name="httpclient">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/commons-codec-1.15.jar!/" />
       <root url="jar://$PROJECT_DIR$/../Utopia-Scala/Disciple/lib/httpclient5-5.1.2.jar!/" />
