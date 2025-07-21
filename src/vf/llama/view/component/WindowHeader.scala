@@ -61,12 +61,16 @@ class WindowHeader(override val hierarchy: ComponentHierarchy, context: StaticTe
 		Framing.withContext(hierarchy, context).verySmall.withBackground(context.background.darkened)
 			// [Title | Close]
 			.build(Stack) { stackF =>
-				stackF.centeredRow.mapContext { _.mapStackMargin { _.expanding } }.build(Mixed) { factories =>
+				stackF.centeredRow.mapContext { _.mapStackMargin { _.noMax.expanding } }.build(Mixed) { factories =>
 					val titleLabel = factories(ViewTextLabel).text(titleP)
 					val closeButton = factories(ImageButton).icon(icon.close) {
 						context.windowPointer.value match {
-							case Some(window) => window.close()
-							case None => System.exit(0)
+							case Some(window) =>
+								println("Closing window")
+								window.close()
+							case None =>
+								println("Close")
+								// System.exit(0)
 						}
 					}
 					

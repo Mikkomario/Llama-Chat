@@ -1,5 +1,7 @@
 package vf.llama.util
 
+import utopia.bunnymunch.jawn.JsonBunny
+import utopia.echo.controller.client.OllamaClient
 import utopia.flow.async.context.ThreadPool
 import utopia.flow.time.TimeExtensions._
 import utopia.flow.util.logging.{Logger, SysErrLogger}
@@ -28,8 +30,11 @@ object Common
 	 * Implicit commonly used execution context
 	 */
 	implicit val exc: ExecutionContext = new ThreadPool("Llama-Chat", 4, 200)
+	implicit val jsonParser: JsonBunny.type = JsonBunny
 	/**
 	 * Implicit commonly used database connection pool
 	 */
 	implicit val cPool: ConnectionPool = new ConnectionPool(connectionKeepAlive = 30.seconds)
+	
+	lazy val ollama = new OllamaClient()
 }

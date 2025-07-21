@@ -75,7 +75,7 @@ class SetupView(override val hierarchy: ComponentHierarchy, context: StaticTextC
 			//      1. Header
 			//      2. Radio buttons for selecting the LLM
 			//      3. A switch for toggling thinking mode
-			val llmArea = factories(Stack).related
+			val llmArea = factories(Stack).related.leading
 				.build(Mixed) { factories =>
 					val header = factories(TextLabel)("LLM")
 					val selection = factories(RadioButtonGroup)
@@ -95,7 +95,7 @@ class SetupView(override val hierarchy: ComponentHierarchy, context: StaticTextC
 				.parent
 			
 			val systemInput = factories(TextField).withFieldName("System message").withHint("Optional")
-				.string(sendSettings.inputWidth.any.lowPriority)
+				.string(sendSettings.inputWidth.any)
 			val messageInput = factories(SendMessageView).withSettings(sendSettings).apply { message =>
 				val baseLlm = llmP.value
 				onComplete(if (thinksFlag.value) baseLlm.thinking else baseLlm, systemInput.value, message)

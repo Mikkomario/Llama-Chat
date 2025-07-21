@@ -5,6 +5,8 @@ import utopia.echo.model.response.ollama.chat.ReplyMessage
 import utopia.firmament.context.ScrollingContext
 import utopia.firmament.context.text.StaticTextContext
 import utopia.flow.view.template.eventful.Changing
+import utopia.genesis.util.Screen
+import utopia.reach.component.factory.FromContextComponentFactoryFactory.Ccff
 import utopia.reach.component.factory.contextual.TextContextualFactory
 import utopia.reach.component.hierarchy.ComponentHierarchy
 import utopia.reach.component.template.{ReachComponent, ReachComponentWrapper}
@@ -27,6 +29,11 @@ case class MessagesViewFactory(hierarchy: ComponentHierarchy, context: StaticTex
 		new MessagesView(hierarchy, context, messagesP)
 }
 
+object MessagesView extends Ccff[StaticTextContext, MessagesViewFactory]
+{
+	override def withContext(hierarchy: ComponentHierarchy, context: StaticTextContext): MessagesViewFactory =
+		MessagesViewFactory(hierarchy, context)
+}
 /**
  * A view which displays n chat messages
  *
@@ -42,6 +49,7 @@ class MessagesView(override val hierarchy: ComponentHierarchy, context: StaticTe
 	
 	// The main view is scrollable
 	private lazy val view = ScrollView.withContext(hierarchy, context).initialized
+		.withMaxOptimalHeight(Screen.height * 0.7)
 		.build(ViewStack) { stackF =>
 			// n message views are stacked on top of each other
 			stackF.mapPointer(messagesP, MessageView) { (viewF, messageP, _) => viewF(messageP) }
