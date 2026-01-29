@@ -36,5 +36,5 @@ object Common
 	 */
 	implicit val cPool: ConnectionPool = new ConnectionPool(connectionKeepAlive = 30.seconds)
 	
-	lazy val ollama = new OllamaClient()
+	lazy val ollama = OllamaClient()
 }

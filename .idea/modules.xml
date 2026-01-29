@@ -15,6 +15,7 @@
       <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Paradigm/Paradigm.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Paradigm/Paradigm.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Reach/Reach.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Reach/Reach.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Vault/Vault.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Vault/Vault.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Utopia-Scala/Vault/Vault-Disconnected/Vault-Disconnected.iml" filepath="$PROJECT_DIR$/../Utopia-Scala/Vault/Vault-Disconnected/Vault-Disconnected.iml" />
     </modules>
   </component>
 </project>

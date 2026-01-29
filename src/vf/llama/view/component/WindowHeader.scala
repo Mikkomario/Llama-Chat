@@ -5,7 +5,7 @@ import utopia.firmament.localization.LocalizedString
 import utopia.flow.collection.immutable.Pair
 import utopia.flow.view.immutable.eventful.Fixed
 import utopia.flow.view.template.eventful.Changing
-import utopia.reach.component.factory.FromContextComponentFactoryFactory.Ccff
+import utopia.reach.component.factory.ContextualComponentFactories.CCF
 import utopia.reach.component.factory.Mixed
 import utopia.reach.component.factory.contextual.TextContextualFactory
 import utopia.reach.component.hierarchy.ComponentHierarchy
@@ -37,7 +37,7 @@ case class WindowHeaderFactory(hierarchy: ComponentHierarchy, context: StaticTex
 	def apply() = new WindowHeader(hierarchy, context, titleP)
 }
 
-object WindowHeader extends Ccff[StaticTextContext, WindowHeaderFactory]
+object WindowHeader extends CCF[StaticTextContext, WindowHeaderFactory]
 {
 	override def withContext(hierarchy: ComponentHierarchy, context: StaticTextContext): WindowHeaderFactory =
 		WindowHeaderFactory(hierarchy, context)

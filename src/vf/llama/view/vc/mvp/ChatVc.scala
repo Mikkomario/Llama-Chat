@@ -1,18 +1,19 @@
 package vf.llama.view.vc.mvp
 
 import utopia.annex.util.RequestResultExtensions._
-import utopia.echo.controller.Chat
+import utopia.echo.controller.chat.{Chat, OllamaChat}
+import utopia.echo.controller.client.OllamaClient
 import utopia.echo.model.ChatMessage
 import utopia.echo.model.enumeration.ChatRole.User
 import utopia.echo.model.llm.LlmDesignator
-import utopia.echo.model.response.ollama.chat.ReplyMessage
+import utopia.echo.model.response.Reply
 import utopia.firmament.context.text.StaticTextContext
 import utopia.firmament.model.enumeration.SizeCategory.Small
 import utopia.flow.collection.CollectionExtensions._
 import utopia.flow.collection.immutable.Pair
 import utopia.flow.time.TimeExtensions._
 import utopia.flow.util.StringExtensions._
-import utopia.flow.util.TryExtensions._
+import utopia.flow.util.result.TryExtensions._
 import utopia.flow.view.mutable.async.Volatile
 import utopia.flow.view.mutable.eventful.AssignableOnce
 import utopia.flow.view.template.eventful.Flag
@@ -21,6 +22,7 @@ import utopia.paradigm.enumeration.Axis
 import utopia.reach.component.factory.{ContextualMixed, Mixed}
 import utopia.reach.container.multi.Stack
 import utopia.reach.container.wrapper.{Framing, Swapper}
+import utopia.reach.cursor.DragTo
 import utopia.reach.window.ReachWindow
 import vf.llama.util.Common._
 import vf.llama.view.CommonView._
@@ -37,7 +39,7 @@ object ChatVc
 	// ATTRIBUTES   ------------------------------
 	
 	private val chatP = AssignableOnce[Chat]()
-	private val streamingMessageP = Volatile.eventful.empty[(ChatMessage, ReplyMessage)]
+	private val streamingMessageP = Volatile.eventful.empty[(ChatMessage, Reply)]
 	private val sendingFlag: Flag = streamingMessageP.lightMap { _.isDefined }
 	
 	private lazy val messageLineSplit = Screen.width * 0.4
@@ -55,6 +57,7 @@ object ChatVc
 			val window = ReachWindow.withContext(windowContext).using(Stack) { (_, stackF) =>
 				stackF.withoutMargin.build(Mixed) { factories =>
 					val header = factories(WindowHeader).withBackground(color.primary.dark)()
+					DragTo.repositionWindow.applyTo(header)
 					// The content is framed
 					val content = factories(Framing).withInsetsAlong(Axis.Y, Small)
 						.withBackground(color.primary.default)
@@ -85,7 +88,8 @@ object ChatVc
 	{
 		factories(SetupView).withInputWidth(messageLineSplit)(llms) { (llm, system, firstMessage) =>
 			// Sets up the chat and sends the first message
-			val chat = new Chat(ollama, llm)
+			implicit val client: OllamaClient = ollama
+			val chat = new OllamaChat(llm)
 			chat.systemMessages = system.ifNotEmpty.emptyOrSingle
 			send(chat, firstMessage)
 			chatP.set(chat)

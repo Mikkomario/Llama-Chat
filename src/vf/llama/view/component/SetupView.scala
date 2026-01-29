@@ -7,7 +7,7 @@ import utopia.firmament.model.stack.LengthExtensions._
 import utopia.flow.collection.immutable.Pair
 import utopia.flow.view.mutable.Pointer
 import utopia.flow.view.mutable.eventful.ResettableFlag
-import utopia.reach.component.factory.FromContextComponentFactoryFactory.Ccff
+import utopia.reach.component.factory.ContextualComponentFactories.CCF
 import utopia.reach.component.factory.Mixed
 import utopia.reach.component.factory.contextual.TextContextualFactory
 import utopia.reach.component.hierarchy.ComponentHierarchy
@@ -38,7 +38,7 @@ case class SetupViewFactory(hierarchy: ComponentHierarchy, context: StaticTextCo
 		new SetupView(hierarchy, context, llms, settings)(complete)
 }
 
-object SetupView extends Ccff[StaticTextContext, SetupViewFactory]
+object SetupView extends CCF[StaticTextContext, SetupViewFactory]
 {
 	override def withContext(hierarchy: ComponentHierarchy, context: StaticTextContext): SetupViewFactory =
 		SetupViewFactory(hierarchy, context)

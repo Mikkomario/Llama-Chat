@@ -2,8 +2,8 @@ package vf.llama.view.component.messaging
 
 import utopia.echo.model.ChatMessage
 import utopia.echo.model.enumeration.ChatRole
-import utopia.echo.model.enumeration.ChatRole.{System, User}
-import utopia.echo.model.response.ollama.chat.ReplyMessage
+import utopia.echo.model.enumeration.ChatRole.{Assistant, System, User}
+import utopia.echo.model.response.Reply
 import utopia.firmament.context.text.StaticTextContext
 import utopia.firmament.localization.LocalString._
 import utopia.firmament.model.stack.LengthPriority.Low
@@ -13,7 +13,7 @@ import utopia.flow.view.immutable.eventful.Fixed
 import utopia.flow.view.template.eventful.Changing
 import utopia.genesis.util.Screen.ppi
 import utopia.paradigm.measurement.DistanceExtensions._
-import utopia.reach.component.factory.FromContextComponentFactoryFactory.Ccff
+import utopia.reach.component.factory.ContextualComponentFactories.CCF
 import utopia.reach.component.factory.Mixed
 import utopia.reach.component.factory.contextual.TextContextualFactory
 import utopia.reach.component.hierarchy.ComponentHierarchy
@@ -36,10 +36,10 @@ case class MessageViewFactory(hierarchy: ComponentHierarchy, context: StaticText
 	
 	// OTHER    ---------------------------
 	
-	def apply(messageP: Changing[Either[ChatMessage, ReplyMessage]]) = new MessageView(hierarchy, context, messageP)
+	def apply(messageP: Changing[Either[ChatMessage, Reply]]) = new MessageView(hierarchy, context, messageP)
 }
 
-object MessageView extends Ccff[StaticTextContext, MessageViewFactory]
+object MessageView extends CCF[StaticTextContext, MessageViewFactory]
 {
 	// ATTRIBUTES   -----------------------
 	
@@ -53,12 +53,11 @@ object MessageView extends Ccff[StaticTextContext, MessageViewFactory]
 }
 /**
  * Used for displaying a (streaming) chat message
- *
  * @author Mikko Hilpinen
  * @since 18.07.2025, v0.1
  */
 class MessageView(override val hierarchy: ComponentHierarchy, context: StaticTextContext,
-                  messageP: Changing[Either[ChatMessage, ReplyMessage]])
+                  messageP: Changing[Either[ChatMessage, Reply]])
 	extends ReachComponentWrapper
 {
 	// ATTRIBUTES   ----------------------
@@ -67,11 +66,16 @@ class MessageView(override val hierarchy: ComponentHierarchy, context: StaticTex
 	
 	private val textP = messageP.flatMapWhile(linkedFlag) {
 		case Left(message) => Fixed(message.text)
-		case Right(reply) => reply.textPointer
+		case Right(reply) =>
+			// Displays either the thinking or the text contents
+			if (reply.thinking)
+				reply.thinkingFlag.flatMap { if (_) reply.thoughtsPointer else reply.textPointer }
+			else
+				reply.textPointer
 	}
 	private val roleP = messageP.mapWhile(linkedFlag) {
 		case Left(message) => message.senderRole
-		case Right(reply) => reply.senderRole
+		case Right(_) => Assistant
 	}
 	private val userRoleFlag = roleP.map { role => userRoles.contains(role) }
 	
@@ -92,7 +96,19 @@ class MessageView(override val hierarchy: ComponentHierarchy, context: StaticTex
 			val messageBg = factories.context.color.light.gray
 			val messageView = factories(Framing).small.rounded(messageBg)
 				.build(SelectableTextLabel) { labelF =>
-					labelF.manyLines(textP.map { _.noLanguage.skipLocalization })
+					// Displays thinking content with a different color / alpha
+					val defaultTextColorP = labelF.context.textColorPointer
+					val textColorP = messageP.flatMapWhile(linkedFlag) {
+						case Left(_) => defaultTextColorP
+						case Right(reply) =>
+							reply.thinkingFlag.flatMap { thinking =>
+								if (thinking)
+									defaultTextColorP.map { _.timesAlpha(0.66) }
+								else
+									defaultTextColorP
+							}
+					}
+					labelF.withTextColorPointer(textColorP).manyLines(textP.map { _.noLanguage.skipLocalization })
 				}
 				.parent
 			

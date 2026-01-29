@@ -102,17 +102,20 @@
     ],
     "statement": [
       {
-        "name": "StatementLink",
-        "extends": "TextPlacement",
+        "name": "StatementPlacement",
+        "from": "utopia.logos",
+        "access": "statement.placement",
         "generic": true,
-        "access": "-",
-        "doc": "Common trait for links between statements and the texts where they are made",
+        "parent": "TextPlacement",
+        "doc": "Common trait for models which are used for placing statements within various texts",
         "props": [
           {
-            "extends": "placedId",
-            "ref": "statement",
+            "parent": "placedId",
             "name": "statementId",
-            "doc": "Id of the statement made within the linked text / entity"
+            "ref": "statement",
+            "with": "placingStatement",
+            "in": "placingStatements",
+            "doc": "Id of the statement which appears within the linked text"
           }
         ]
       }

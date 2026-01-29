@@ -9,7 +9,7 @@ import utopia.flow.view.mutable.Pointer
 import utopia.flow.view.template.eventful.Flag
 import utopia.genesis.util.Screen
 import utopia.paradigm.color.ColorRole.Secondary
-import utopia.reach.component.factory.FromContextComponentFactoryFactory.Ccff
+import utopia.reach.component.factory.ContextualComponentFactories.CCF
 import utopia.reach.component.factory.Mixed
 import utopia.reach.component.factory.contextual.TextContextualFactory
 import utopia.reach.component.hierarchy.ComponentHierarchy
@@ -154,7 +154,7 @@ case class ContextualSendMessageViewFactory(hierarchy: ComponentHierarchy, conte
  */
 case class SendMessageViewSetup(settings: SendMessageViewSettings = SendMessageViewSettings.default)
 	extends SendMessageViewSettingsWrapper[SendMessageViewSetup]
-		with Ccff[StaticTextContext, ContextualSendMessageViewFactory]
+		with CCF[StaticTextContext, ContextualSendMessageViewFactory]
 {
 	// IMPLEMENTED	--------------------
 	

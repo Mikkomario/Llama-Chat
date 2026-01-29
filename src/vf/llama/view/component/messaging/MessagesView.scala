@@ -1,12 +1,12 @@
 package vf.llama.view.component.messaging
 
 import utopia.echo.model.ChatMessage
-import utopia.echo.model.response.ollama.chat.ReplyMessage
+import utopia.echo.model.response.Reply
 import utopia.firmament.context.ScrollingContext
 import utopia.firmament.context.text.StaticTextContext
 import utopia.flow.view.template.eventful.Changing
 import utopia.genesis.util.Screen
-import utopia.reach.component.factory.FromContextComponentFactoryFactory.Ccff
+import utopia.reach.component.factory.ContextualComponentFactories.CCF
 import utopia.reach.component.factory.contextual.TextContextualFactory
 import utopia.reach.component.hierarchy.ComponentHierarchy
 import utopia.reach.component.template.{ReachComponent, ReachComponentWrapper}
@@ -25,11 +25,11 @@ case class MessagesViewFactory(hierarchy: ComponentHierarchy, context: StaticTex
 	
 	// OTHER    ------------------------------
 	
-	def apply(messagesP: Changing[Seq[Either[ChatMessage, ReplyMessage]]])(implicit sc: ScrollingContext) =
+	def apply(messagesP: Changing[Seq[Either[ChatMessage, Reply]]])(implicit sc: ScrollingContext) =
 		new MessagesView(hierarchy, context, messagesP)
 }
 
-object MessagesView extends Ccff[StaticTextContext, MessagesViewFactory]
+object MessagesView extends CCF[StaticTextContext, MessagesViewFactory]
 {
 	override def withContext(hierarchy: ComponentHierarchy, context: StaticTextContext): MessagesViewFactory =
 		MessagesViewFactory(hierarchy, context)
@@ -41,7 +41,7 @@ object MessagesView extends Ccff[StaticTextContext, MessagesViewFactory]
  * @since 18.07.2025, v0.1
  */
 class MessagesView(override val hierarchy: ComponentHierarchy, context: StaticTextContext,
-                   messagesP: Changing[Seq[Either[ChatMessage, ReplyMessage]]])
+                   messagesP: Changing[Seq[Either[ChatMessage, Reply]]])
                   (implicit sc: ScrollingContext)
 	extends ReachComponentWrapper
 {
